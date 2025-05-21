@@ -48,7 +48,7 @@ const Hero = () => {
 
   // Auto-play functionality
   useEffect(() => {
-    let slideInterval;
+    let slideInterval: NodeJS.Timeout | undefined;
 
     if (isAutoPlaying) {
       slideInterval = setInterval(() => {
