@@ -3,12 +3,37 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Search, ChevronDown } from "lucide-react";
 
+const aboutDropdownItems = [
+  "ប្រវត្តិខេត្ត",
+  "រចនាសម្ព័ន្ធរដ្ឋបាលខេត្ត",
+  "ថ្នាក់ដឹកនាំខេត្ត",
+  "ស្ថានភាពទូទៅ",
+  "ក្របខណ្ឌអភិវឌ្ឍន៍ខេត្ត",
+  "មន្ទី-អង្គភាពជុំវិញខេត្ត",
+];
+
+const Dropdown = ({ isOpen, items }: { isOpen: boolean; items: string[] }) => {
+  if (!isOpen) return null;
+
+  return (
+    <ul className="absolute top-full left-0 w-44 md:w-56 bg-[#003A8A] opacity-90 text-white shadow-md z-50 rounded-sm">
+      {items.map((item, i) => (
+        <li
+          key={i}
+          className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer hover:bg-[#002f6c]"
+        >
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLUListElement>(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -28,28 +53,29 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-primary min-h-[70px]">
-        <div className="mx-4 md:mx-19 flex items-center justify-between">
-          <div className="flex items-center py-4 h-full">
+      {/* Top Header */}
+      <header className="bg-primary min-h-[60px]">
+        <div className="px-2 sm:px-4 md:px-12 lg:px-20 flex items-center justify-between">
+          <div className="flex items-center py-3 h-full">
             <Image
               src="/logo.png"
               alt="Logo"
-              width={50}
-              height={50}
+              width={40}
+              height={40}
               className="mr-2 md:mr-4"
               style={{ height: "auto" }}
             />
             <div className="title">
-              <h2 className="text-base md:text-xl text-white font-secondary-bold font-black">
+              <h2 className="text-sm sm:text-base md:text-xl text-white font-secondary-bold font-black">
                 រដ្ឋាបាលខេត្ដកែប
               </h2>
-              <h2 className="text-xs md:text-lg text-white font-english">
+              <h2 className="text-xs sm:text-sm md:text-md text-white font-english">
                 KEP ADMINISTRATION
               </h2>
             </div>
           </div>
 
-          {/* Hamburger for mobile */}
+          {/* Mobile Hamburger */}
           <button
             className="md:hidden flex flex-col justify-center items-center w-10 h-10"
             onClick={() => setMobileMenuOpen((v) => !v)}
@@ -60,26 +86,28 @@ const Header = () => {
             <span className="block w-6 h-0.5 bg-white"></span>
           </button>
 
+          {/* Desktop Search & Language */}
           <div className="hidden md:flex items-center h-full">
-            <div className="relative w-[200px] md:w-[400px]">
+            <div className="relative w-[140px] sm:w-[200px] md:w-[300px] lg:w-[400px]">
               <input
                 type="text"
                 placeholder="ស្វែងរក"
-                className="px-3 py-2.5 pr-10 rounded-sm bg-white focus:outline-none w-full placeholder:text-black"
+                className="px-3 py-2.5 pr-10 rounded-sm bg-white focus:outline-none w-full placeholder:text-black text-xs sm:text-sm md:text-base"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black">
-                <Search size={20} />
+                <Search size={18} />
               </span>
             </div>
 
-            <div className="w-[1px] h-8 ml-4 bg-white hidden md:block"></div>
+            <div className="w-[1px] h-8 ml-4 bg-white"></div>
 
-            <div className="border-1 border-[#002266] rounded-sm py-2 px-4 ml-4 flex gap-2">
+            <div className="border border-[#002266] rounded-sm py-2 px-4 ml-4 flex gap-2 items-center">
               <Image
                 src="/Flag_of_Cambodia.svg"
                 alt="icon"
-                width={30}
-                height={19}
+                width={45}
+                height={29}
+                className="w-12 h-auto"
               />
               <p className="text-white text-sm md:text-base">ភាសាខ្មែរ</p>
             </div>
@@ -88,70 +116,51 @@ const Header = () => {
       </header>
 
       {/* Desktop Menu */}
-      <div className="h-15 bg-primary w-full border-t-2 border-b-2 border-[#002266] hidden md:block">
+      <nav className="h-13 bg-primary w-full border-y-2 border-[#002266] hidden md:block">
         <ul
-          className="flex items-center relative h-full mx-19"
+          className="flex items-center h-full px-4 md:px-8 lg:px-20 whitespace-nowrap overflow-x-auto"
           ref={dropdownRef}
         >
-          <li className="text-white font-secondary-bold text-lg py-3.5 pr-6">
+          <li className="text-white font-secondary-bold text-base md:text-lg py-3.5 pr-4 md:pr-6">
             ទំព័រដើម
           </li>
+
           <li
-            className="relative text-white font-primary text-lg flex items-center gap-1 py-3.5 px-6 cursor-pointer"
+            className="relative text-white font-primary text-base md:text-lg flex items-center gap-1 py-3.5 px-4 md:px-6 cursor-pointer"
             onClick={() => toggleDropdown("about")}
           >
             អំពីខេត្ដកែប
-            <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
-            {openDropdown === "about" && (
-              <ul className="absolute top-full left-0 w-56 bg-[#003A8A] opacity-80 text-white shadow-md z-50 rounded-sm">
-                <li className="px-4 py-3 font-primary text-white  flex items-center gap-1 cursor-pointer">
-                  ប្រវត្តិខេត្ត
-                  <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
-                </li>
-                <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                  រចនាសម្ព័ន្ធរដ្ឋបាលខេត្ត
-                  <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
-                </li>
-                <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                  ថ្នាក់ដឹកនាំខេត្ត
-                  <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
-                </li>
-                <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                  ស្ថានភាពទូទៅ
-                  <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
-                </li>
-                <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                  ក្របខណ្ឌអភិវឌ្ឍន៍ខេត្ត
-                  <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
-                </li>
-                <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                  មន្ទី-អង្គភាពជុំវិញខេត្ត
-                  <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
-                </li>
-              </ul>
-            )}
+            <ChevronDown size={20} strokeWidth={1.5} />
+            <Dropdown
+              isOpen={openDropdown === "about"}
+              items={aboutDropdownItems}
+            />
           </li>
-          <li className=" relative text-white font-primary text-lg flex items-center gap-1 py-3.5 px-6 cursor-pointer">
+
+          <li className="text-white font-primary text-base md:text-lg flex items-center gap-1 py-3.5 px-4 md:px-6 cursor-pointer">
             សេវារដ្ឋបាល
-            <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
+            <ChevronDown size={20} strokeWidth={1.5} />
           </li>
-          <li className="text-white font-primary text-lg flex items-center gap-1 py-3.5 px-6 cursor-pointer">
+
+          <li className="text-white font-primary text-base md:text-lg flex items-center gap-1 py-3.5 px-4 md:px-6 cursor-pointer">
             ព៍ត៌មាន~ព្រឹត្តិការណ៍
-            <ChevronDown size={24} className="ml-1" strokeWidth={1.5} />
+            <ChevronDown size={20} strokeWidth={1.5} />
           </li>
-          <li className="text-white font-primary text-lg flex items-center gap-1 py-3.5 px-6">
+
+          <li className="text-white font-primary text-base md:text-lg py-3.5 px-4 md:px-6 cursor-pointer">
             បទដ្ឋានគតិយុត្តិ
           </li>
-          <li className="text-white font-primary text-lg flex items-center gap-1 py-3.5 px-6">
+
+          <li className="text-white font-primary text-base md:text-lg py-3.5 px-4 md:px-6 cursor-pointer">
             សក្តានុពលវិនិយោគ
           </li>
         </ul>
-      </div>
+      </nav>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 bg-black/60 z-50">
-          <div className="absolute top-0 left-0 w-3/4 max-w-xs h-full bg-primary shadow-lg p-6">
+          <div className="absolute top-0 left-0 w-4/5 max-w-xs h-full bg-primary shadow-lg p-5 sm:p-6">
             <button
               className="absolute top-4 right-4 text-white text-2xl"
               onClick={() => setMobileMenuOpen(false)}
@@ -163,71 +172,63 @@ const Header = () => {
               <li className="text-white font-secondary-bold text-base py-2">
                 ទំព័រដើម
               </li>
+
               <li
                 className="relative text-white font-primary text-base flex items-center gap-1 py-2 cursor-pointer"
                 onClick={() => toggleDropdown("about")}
               >
                 អំពីខេត្ដកែប
-                <ChevronDown size={20} className="ml-1" strokeWidth={1.5} />
+                <ChevronDown size={18} strokeWidth={1.5} />
                 {openDropdown === "about" && (
-                  <ul className="absolute left-full top-0 w-48 bg-[#003A8A] opacity-90 text-white shadow-md z-50 rounded-sm">
-                    <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                      ប្រវត្តិខេត្ត
-                    </li>
-                    <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                      រចនាសម្ព័ន្ធរដ្ឋបាលខេត្ត
-                    </li>
-                    <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                      ថ្នាក់ដឹកនាំខេត្ត
-                    </li>
-                    <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                      ស្ថានភាពទូទៅ
-                    </li>
-                    <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                      ក្របខណ្ឌអភិវឌ្ឍន៍ខេត្ត
-                    </li>
-                    <li className="px-4 py-3 font-primary text-white flex items-center gap-1 cursor-pointer">
-                      មន្ទី-អង្គភាពជុំវិញខេត្ត
-                    </li>
+                  <ul className="absolute left-full top-0 w-48 bg-[#003A8A] opacity-95 text-white shadow-md z-50 rounded-sm">
+                    {aboutDropdownItems.map((item, i) => (
+                      <li
+                        key={i}
+                        className="px-4 py-3 font-primary text-white hover:bg-[#002f6c] cursor-pointer"
+                      >
+                        {item}
+                      </li>
+                    ))}
                   </ul>
                 )}
               </li>
+
               <li className="text-white font-primary text-base flex items-center gap-1 py-2 cursor-pointer">
                 សេវារដ្ឋបាល
-                <ChevronDown size={20} className="ml-1" strokeWidth={1.5} />
               </li>
               <li className="text-white font-primary text-base flex items-center gap-1 py-2 cursor-pointer">
                 ព៍ត៌មាន~ព្រឹត្តិការណ៍
-                <ChevronDown size={20} className="ml-1" strokeWidth={1.5} />
               </li>
-              <li className="text-white font-primary text-base flex items-center gap-1 py-2">
+              <li className="text-white font-primary text-base py-2">
                 បទដ្ឋានគតិយុត្តិ
               </li>
-              <li className="text-white font-primary text-base flex items-center gap-1 py-2">
+              <li className="text-white font-primary text-base py-2">
                 សក្តានុពលវិនិយោគ
               </li>
-              {/* Search and language for mobile */}
+
+              {/* Mobile Search & Language */}
               <li className="mt-6">
                 <div className="relative w-full">
                   <input
                     type="text"
                     placeholder="ស្វែងរក"
-                    className="px-3 py-2.5 pr-10 rounded-sm bg-white focus:outline-none w-full placeholder:text-black"
+                    className="px-3 py-2.5 pr-10 rounded-sm bg-white focus:outline-none w-full placeholder:text-black text-xs"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black">
-                    <Search size={20} />
+                    <Search size={18} />
                   </span>
                 </div>
               </li>
               <li>
-                <div className="border-1 border-[#002266] rounded-sm py-2 px-4 flex gap-2 mt-2">
+                <div className="border border-[#002266] rounded-sm py-2 px-3 flex gap-2 mt-2">
                   <Image
                     src="/Flag_of_Cambodia.svg"
                     alt="icon"
-                    width={30}
-                    height={19}
+                    width={45}
+                    height={29}
+                    className="w-12 h-auto"
                   />
-                  <p className="text-white text-sm">ភាសាខ្មែរ</p>
+                  <p className="text-white text-xs">ភាសាខ្មែរ</p>
                 </div>
               </li>
             </ul>

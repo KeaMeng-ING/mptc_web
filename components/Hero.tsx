@@ -90,7 +90,7 @@ const Hero = () => {
       <section className="bg-primary min-h-[300px] grid grid-cols-1 md:grid-cols-2 items-center relative">
         {/* Left Arrow */}
         <button
-          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-button/70 hover:bg-blue-500 rounded-lg p-2 shadow"
+          className="hidden md:flex absolute left-17 top-1/2 -translate-y-1/2 z-10 bg-button/70 hover:bg-blue-500 rounded-lg p-2 shadow"
           aria-label="Previous"
           onClick={goToPrevSlide}
         >
@@ -98,7 +98,7 @@ const Hero = () => {
         </button>
         {/* Right Arrow */}
         <button
-          className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-button/70 hover:bg-secondary rounded-lg p-2 shadow"
+          className="hidden md:flex absolute right-17 top-1/2 -translate-y-1/2 z-10 bg-button/70 hover:bg-secondary rounded-lg p-2 shadow"
           aria-label="Next"
           onClick={goToNextSlide}
         >
@@ -106,7 +106,7 @@ const Hero = () => {
         </button>
 
         {/* Image */}
-        <div className="relative w-full h-[220px] md:h-[400px]">
+        <div className="relative w-full h-[220px] md:min-h-[350px] md:h-[420px]">
           <Image
             src={slides[currentSlide].image}
             alt={`Slide ${currentSlide + 1}`}
@@ -157,8 +157,8 @@ const Hero = () => {
                 </p>
               </div>
             </div>
-            <div className="w-full md:w-131">
-              <p className="text-lg md:text-3xl mb-4 font-primary">
+            <div className="w-full md:max-w-[500px]">
+              <p className="text-lg md:text-2xl lg:text-3xl mb-4 font-primary max-w-full">
                 {slides[currentSlide].title}
               </p>
             </div>
