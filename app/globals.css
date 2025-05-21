@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-primary: var(--font-kantumruy);
+  --font-secondary: var(--font-koh-santepheap);
+  --font-english: var(--font-lato);
+}
+
+@theme {
+  --color-primary: #003a8a;
+  --color-button: #002266;
+  --color-secondary: #ee7d22;
+}
+
+/* Then in your Tailwind CSS (or classes) use these font + weight combos */
+.font-secondary {
+  font-family: var(--font-secondary);
+}
+
+.font-secondary-bold {
+  font-family: var(--font-secondary);
+  font-weight: 700;
+}
+
+@layer base {
+  p {
+    @apply font-primary text-white;
+  }
+}
+
+@layer utilities;
